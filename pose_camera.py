@@ -160,7 +160,18 @@ def main():
         return (svg_canvas.tostring(), False)
 
     run(run_inference, render_overlay)
+    
 
 
 if __name__ == '__main__':
     main()
+    
+poses, inference_time = engine.DetectPosesInImage(pil_image)
+    print('Inference time: %.f ms' % (inference_time * 1000))
+    
+    for pose in poses:
+    if pose.score < 0.4: continue
+    print('\nPose Score: ', pose.score)
+    for label, keypoint in pose.keypoints.items():
+        print('  %-20s x=%-4d y=%-4d score=%.1f' %
+              (label.name, keypoint.point[0], keypoint.point[1], keypoint.score))
